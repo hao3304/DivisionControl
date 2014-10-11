@@ -7,6 +7,7 @@ $.fn.Divs = function (options) {
     var defaults = {
         data: { name: "所有站点", id: "0", children: [{ name: "111111", id: "1", children: [] }, { name: "222222", id: "1", children: [] }, { name: "33333", id: "1", children: [] }, { name: "444444", id: "1", children: [] }, { name: "555555", id: "1", children: [] }] },
         onClick: function (ele, type) {
+
         }
     }
 
@@ -106,7 +107,7 @@ $.fn.Divs = function (options) {
 
 
             this._scroll();
-            
+
             $(window).resize(function () {
                 divs._scroll();
             });
@@ -114,7 +115,7 @@ $.fn.Divs = function (options) {
 
         },
         _scroll: function () {
-            var th = $("#divs_control .area-content").width()-100;
+            var th = $("#divs_control .area-content").width() - 100;
             var sh = null;
             $("#divs_control .area-root").each(function () {
                 sh += $(this).width();
@@ -124,36 +125,49 @@ $.fn.Divs = function (options) {
                     $(this).show();
                 }
             });
-            if (sh > th) {
-                $("#divs_control .prev").addClass("btn_active_left");
-                $("#divs_control .next").addClass("btn_active_right");
-                divs.prev_next();
-            } else {
-                $("#divs_control .prev").removeClass("btn_active_left").unbind()
+
+            this._redraw();
+        },
+        _redraw: function () {
+
+            var next = $("#divs_control .area-root:visible:last").next();
+            if (next.length <= 0) {
                 $("#divs_control .next").removeClass("btn_active_right").unbind();
+            } else {
+                $("#divs_control .next").addClass("btn_active_right");
             }
+            var prev = $("#divs_control .area-root:visible:first").prev();
+            if (prev.length <= 0) {
+                $("#divs_control .prev").removeClass("btn_active_left").unbind();
+            } else {
+                $("#divs_control .prev").addClass("btn_active_left");
+            }
+            this.prev_next();
+
         },
         prev_next: function () {
-
             var prev = $("#divs_control .prev");
-            var next = $("#divs_control .next");
-            next.unbind().on("click", function () {
-                var last = $("#divs_control .area-root:last");
-                last.prependTo("#divs_control .area-content").show("normal", function () {
-                    $("#divs_control .area-root").show();
-                    divs._scroll()
+            var next = $("#divs_control .next");          
+            if (next.hasClass("btn_active_right")) {
+                next.unbind().on("click", function () {
+                    var next_show = $("#divs_control .area-root:visible:last").next(":first");
+                    var first_hide = $("#divs_control .area-root:visible:first");
+                    first_hide.hide();
+                    next_show.show();
+                    divs._redraw();
                 });
-          
-            });
-            prev.unbind().on("click", function () {            
-                var first = $("#divs_control .area-root:first");
-                first.hide("normal", function () {
-                    first.appendTo("#divs_control .area-content");
-                    $("#divs_control .area-root").show();
-                    divs._scroll()
-                });
-               
-            })
+            }
+            if (prev.hasClass("btn_active_left")) {
+                prev.unbind().on("click", function () {
+                    var prev_show = $("#divs_control .area-root:visible:first").prev(":last");
+                    var list_hide = $("#divs_control .area-root:visible:last");
+                    list_hide.hide();
+                    prev_show.show();
+                    divs._redraw();
+
+                })
+            }
+
         }
 
     }

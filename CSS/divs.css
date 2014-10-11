@@ -121,7 +121,7 @@ a
 
 a.icon-arrow-left
 {
-    background-position: -604px -146px;
+    background-position: -604px -248px;
     height: 34px;
     width: 30px;
     float: left;
@@ -131,7 +131,7 @@ a.icon-arrow-left
 
 a.icon-arrow-right
 {
-    background-position: -665px -146px;
+    background-position: -665px -248px;
     height: 34px;
     width: 30px;
     float: right;
@@ -284,6 +284,7 @@ a.active
 .btn_active_left
 {
     cursor:pointer !important;
+    background-position: -604px -146px !important;
 }
 
 .btn_active_left:hover
@@ -294,6 +295,7 @@ a.active
 .btn_active_right
 {
     cursor:pointer !important;
+    background-position: -665px -146px !important;
 }
 
 .btn_active_right:hover
